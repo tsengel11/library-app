@@ -1,52 +1,54 @@
-// auth.service.ts
+// src/app/services/auth.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 
-export interface RegisterUser {
+export interface User {
+  id?: number;
   username: string;
-  password: string;
+  password?: string;
+  role: string;
   first_name: string;
   last_name: string;
   address?: string;
   phone_number?: string;
-  role: 'user' | 'staff' | 'admin';
-  status: 'active' | 'deactive';
+  status: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private authUrl = 'http://localhost:8000';
-  private tokenKey = 'token';
+  private authUrl = 'http://localhost:8000/token';
+  private registerUrl = 'http://localhost:8000/users/';
+  private loggedIn = new BehaviorSubject<boolean>(this.hasToken());
 
   constructor(private http: HttpClient) { }
 
   login(username: string, password: string): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
     const body = `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
-    return this.http.post<any>(`${this.authUrl}/token`, body, { headers });
+    return this.http.post<any>(this.authUrl, body, { headers });
   }
 
-  registerUser(user: RegisterUser): Observable<any> {
-    return this.http.post<any>(`${this.authUrl}/users/`, user);
+  registerUser(user: User): Observable<User> {
+    return this.http.post<User>(this.registerUrl, user);
   }
 
   logout() {
-    localStorage.removeItem(this.tokenKey);
-    // Optionally, navigate to login page
+    localStorage.removeItem('token');
+    this.loggedIn.next(false);
   }
 
-  getToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
+  isLoggedIn(): Observable<boolean> {
+    return this.loggedIn.asObservable();
   }
 
-  isLoggedIn(): boolean {
-    return !!this.getToken();
+  setLoggedIn(value: boolean) {
+    this.loggedIn.next(value);
   }
 
-  setToken(token: string) {
-    localStorage.setItem(this.tokenKey, token);
+  private hasToken(): boolean {
+    return !!localStorage.getItem('token');
   }
 }
