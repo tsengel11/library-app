@@ -1,4 +1,4 @@
-// category.service.ts
+// category.service.ts (Extended)
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -32,5 +32,11 @@ export class CategoryService {
     return this.http.post<Category>(this.categoriesUrl, category, { headers });
   }
 
-  // Implement update and delete methods if needed
+  deleteCategory(id: number): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+    return this.http.delete(`${this.categoriesUrl}${id}/`, { headers });
+  }
+
+  // Implement update method if needed
 }

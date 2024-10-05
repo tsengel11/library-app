@@ -1,4 +1,4 @@
-// category-list.component.ts
+// category-list.component.ts (Extended)
 import { Component, OnInit } from '@angular/core';
 import { CategoryService, Category } from '../../services/category.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -35,5 +35,16 @@ export class CategoryListComponent implements OnInit {
     this.router.navigate(['/categories/add']);
   }
 
-  // Implement edit and delete methods if needed
+  deleteCategory(category: Category) {
+    if (confirm(`Are you sure you want to delete category "${category.name}"?`)) {
+      this.categoryService.deleteCategory(category.id!).subscribe(
+        res => {
+          this.snackBar.open('Category deleted successfully!', 'Close', { duration: 3000 });
+          this.loadCategories();
+        },
+        err => this.snackBar.open('Failed to delete category', 'Close', { duration: 3000 })
+      );
+    }
+  }
+
 }
