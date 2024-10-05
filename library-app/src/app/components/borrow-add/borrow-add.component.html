@@ -24,18 +24,14 @@
           </mat-form-field>
   
           <!-- Barcode Scanning -->
-          <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Scan Book Barcode (ISBN)</mat-label>
-            <input matInput [(ngModel)]="scannedBarcode" name="scannedBarcode" required>
-            <button mat-button matSuffix mat-icon-button aria-label="Scan" (click)="scanBarcode()">
-              <mat-icon>camera_alt</mat-icon>
-            </button>
-          </mat-form-field>
+          <div class="barcode-scanner">
+            <ngx-barcode-scanner (onCodeResult)="handleBarcodeResult($event)"></ngx-barcode-scanner>
+          </div>
   
           <!-- Display Selected Book -->
           <div *ngIf="borrow.book_id">
             <p>Selected Book ID: {{ borrow.book_id }}</p>
-            <p>Due Date: {{ borrow.due_date }}</p>
+            <p>Due Date: {{ borrow.due_date | date }}</p>
           </div>
   
           <button mat-raised-button color="primary" type="submit" [disabled]="!borrowForm.form.valid || !borrow.book_id">

@@ -1,4 +1,4 @@
-// borrow-add.component.ts
+// borrow-add.component.ts (Updated for Barcode Scanner)
 import { Component, OnInit } from '@angular/core';
 import { BorrowService, Borrow } from '../../services/borrow.service';
 import { BookService, Book } from '../../services/book.service';
@@ -53,9 +53,12 @@ export class BorrowAddComponent implements OnInit {
     );
   }
 
+  handleBarcodeResult(result: string) {
+    this.scannedBarcode = result;
+    this.scanBarcode();
+  }
+
   scanBarcode() {
-    // In a real application, integrate a barcode scanner or use a camera-based scanning library.
-    // Here, we'll simulate barcode scanning with an input field.
     const book = this.books.find(b => b.isbn === this.scannedBarcode);
     if (book && book.available_quantity > 0) {
       this.borrow.book_id = book.id!;
