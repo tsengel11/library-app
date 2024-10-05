@@ -1,23 +1,32 @@
 /* borrow-book.component.css */
-.borrow-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 40px;
-  }
-  
-  .borrow-card {
-    width: 600px;
-  }
-  
-  .full-width {
-    width: 100%;
-    margin-bottom: 16px;
-  }
-  
-  .selected-book {
-    margin-bottom: 16px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
+.borrow-form-container {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.borrow-form-card {
+  width: 600px;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+mat-card-title {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+button {
+  width: 100%;
+  margin-top: 20px;
+}
+
+zxing-scanner {
+  width: 100%;
+  height: 300px;
+  margin-bottom: 15px;
+}

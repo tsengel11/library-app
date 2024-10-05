@@ -1,0 +1,26 @@
+/* book-form.component.css */
+.form-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+  }
+  
+  .form-card {
+    width: 600px;
+  }
+  
+  .full-width {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  
+  mat-card-title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  button {
+    width: 100%;
+    margin-top: 20px;
+  }

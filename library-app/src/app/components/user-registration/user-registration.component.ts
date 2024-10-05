@@ -1,6 +1,6 @@
-// src/app/components/user-registration/user-registration.component.ts
+// user-registration.component.ts
 import { Component } from '@angular/core';
-import { AuthService, User } from '../../services/auth.service';
+import { AuthService } from '../../services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 
@@ -11,14 +11,18 @@ import { Router } from '@angular/router';
 })
 export class UserRegistrationComponent {
 
-  user: User = {
+  user = {
     username: '',
     password: '',
-    role: 'user', // default role
     first_name: '',
     last_name: '',
+    address: '',
+    phone_number: '',
+    role: 'user', // default role
     status: 'active' // default status
   };
+
+  errorMessage = '';
 
   constructor(
     private authService: AuthService,
@@ -30,10 +34,11 @@ export class UserRegistrationComponent {
     this.authService.registerUser(this.user).subscribe(
       res => {
         this.snackBar.open('User registered successfully!', 'Close', { duration: 3000 });
-        this.router.navigate(['/login']); // Navigate to login or another page
+        this.router.navigate(['/login']); // Navigate to login after successful registration
       },
       err => {
-        this.snackBar.open('Registration failed. Please try again.', 'Close', { duration: 3000 });
+        this.errorMessage = err.error.detail || 'Registration failed. Please try again.';
+        this.snackBar.open(this.errorMessage, 'Close', { duration: 3000 });
       }
     );
   }

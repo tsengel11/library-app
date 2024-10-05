@@ -1,9 +1,8 @@
-// src/app/components/book-list/book-list.component.ts
+// book-list.component.ts (Updated with loading)
 import { Component, OnInit } from '@angular/core';
 import { BookService, Book } from '../../services/book.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatDialog } from '@angular/material/dialog';
-import { BorrowBookDialogComponent } from '../borrow-book-dialog/borrow-book-dialog.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-book-list',
@@ -13,12 +12,13 @@ import { BorrowBookDialogComponent } from '../borrow-book-dialog/borrow-book-dia
 export class BookListComponent implements OnInit {
 
   books: Book[] = [];
-  displayedColumns: string[] = ['title', 'author', 'isbn', 'publisher', 'edition', 'available_quantity', 'actions'];
+  displayedColumns: string[] = ['title', 'author', 'isbn', 'publisher', 'edition', 'total_quantity', 'available_quantity', 'categories', 'actions'];
+  isLoading = false;
 
   constructor(
     private bookService: BookService,
     private snackBar: MatSnackBar,
-    public dialog: MatDialog
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -26,25 +26,28 @@ export class BookListComponent implements OnInit {
   }
 
   loadBooks() {
+    this.isLoading = true;
     this.bookService.getBooks().subscribe(
-      data => this.books = data,
-      err => this.snackBar.open('Failed to load books', 'Close', { duration: 3000 })
+      data => {
+        this.books = data;
+        this.isLoading = false;
+      },
+      err => {
+        this.snackBar.open('Failed to load books', 'Close', { duration: 3000 });
+        this.isLoading = false;
+      }
     );
   }
 
-  borrowBook(book: Book) {
-    const dialogRef = this.dialog.open(BorrowBookDialogComponent, {
-      width: '300px',
-      data: { bookId: book.id, bookTitle: book.title }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 'success') {
-        this.snackBar.open(`Borrowed ${book.title}`, 'Close', { duration: 3000 });
-        this.loadBooks();
-      }
-    });
+  addBook() {
+    this.router.navigate(['/add-book']);
   }
 
-  // Implement other actions like returnBook, editBook, deleteBook as needed
+  editBook(book: Book) {
+    this.router.navigate(['/edit-book', book.id]);
+  }
+
+  viewBook(book: Book) {
+    this.router.navigate(['/book-detail', book.id]);
+  }
 }

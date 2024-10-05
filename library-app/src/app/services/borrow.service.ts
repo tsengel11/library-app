@@ -22,19 +22,22 @@ export class BorrowService {
 
   constructor(private http: HttpClient) { }
 
-  borrowBook(borrow: Borrow): Observable<Borrow> {
+  borrowBook(borrowData: any): Observable<any> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({ 
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     });
-    return this.http.post<Borrow>(this.borrowUrl, borrow, { headers });
+    return this.http.post<any>(this.borrowUrl, borrowData, { headers });
   }
 
-  returnBook(borrowId: number): Observable<Borrow> {
+  returnBook(borrowId: number): Observable<any> {
     const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
-    return this.http.post<Borrow>(`${this.returnUrl}${borrowId}`, {}, { headers });
+    const headers = new HttpHeaders({ 
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+    return this.http.post<any>(`${this.returnUrl}${borrowId}`, {}, { headers });
   }
 
   getBorrows(): Observable<Borrow[]> {

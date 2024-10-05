@@ -1,49 +1,36 @@
 <!-- borrow-book.component.html -->
-<div class="borrow-container">
-    <mat-card class="borrow-card">
-      <mat-card-title>Borrow Book (Staff Only)</mat-card-title>
-      <mat-card-content>
-        <form (ngSubmit)="borrowBook()" #borrowForm="ngForm">
-  
-          <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Select User</mat-label>
-            <mat-select [(ngModel)]="selectedUserId" name="user" required>
-              <mat-option *ngFor="let user of users" [value]="user.id">
-                {{ user.first_name }} {{ user.last_name }} ({{ user.username }})
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-  
-          <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Scan Book Barcode (ISBN)</mat-label>
-            <input matInput 
-                   [(ngModel)]="scannedBarcode" 
-                   name="barcode" 
-                   required 
-                   (keyup.enter)="onBarcodeScanned()" 
-                   #barcodeInput="ngModel"
-                   autofocus>
-          </mat-form-field>
-  
-          <div *ngIf="selectedBook" class="selected-book">
-            <h3>Selected Book:</h3>
-            <p><strong>Title:</strong> {{ selectedBook.title }}</p>
-            <p><strong>Author:</strong> {{ selectedBook.author }}</p>
-            <p><strong>ISBN:</strong> {{ selectedBook.isbn }}</p>
-            <p><strong>Available Quantity:</strong> {{ selectedBook.available_quantity }}</p>
-          </div>
-  
-          <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Due Date</mat-label>
-            <input matInput [matDatepicker]="picker" [(ngModel)]="dueDate" name="dueDate" required>
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
-  
-          <button mat-raised-button color="primary" type="submit" [disabled]="!borrowForm.form.valid || !selectedBook">
-            Borrow Book
-          </button>
-        </form>
-      </mat-card-content>
-    </mat-card>
-  </div>
+<mat-toolbar color="primary">
+  <button mat-icon-button (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span>Borrow Book</span>
+</mat-toolbar>
+
+<div class="borrow-form-container">
+  <mat-card class="borrow-form-card">
+    <mat-card-title>Borrow a Book</mat-card-title>
+    <mat-card-content>
+      <form (ngSubmit)="borrowBook()" #borrowForm="ngForm">
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>User ID</mat-label>
+          <input matInput type="number" [(ngModel)]="userId" name="userId" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Scan Book Barcode</mat-label>
+          <zxing-scanner (scanSuccess)="onCodeResult($event)"></zxing-scanner>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Book Barcode</mat-label>
+          <input matInput [(ngModel)]="bookBarcode" name="bookBarcode" readonly required>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="!borrowForm.form.valid">
+          Borrow Book
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

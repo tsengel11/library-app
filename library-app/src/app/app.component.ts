@@ -1,8 +1,7 @@
-// app.component.ts
+// app.component.ts (Updated)
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './services/auth.service';
-import { UserService, User } from './services/user.service';
-import { Observable } from 'rxjs';
+import jwt_decode from 'jwt-decode';
 import { Router } from '@angular/router';
 
 @Component({
@@ -11,44 +10,42 @@ import { Router } from '@angular/router';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
-  isLoggedIn$!: Observable<boolean>;
-  currentUser: User | null = null;
+  title = 'library-app';
+  userRole: string | null = null;
 
-  constructor(
-    private authService: AuthService,
-    private userService: UserService,
-    private router: Router
-  ) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
-  ngOnInit() {
-    this.isLoggedIn$ = this.authService.isLoggedIn();
+  ngOnInit(): void {
+    this.updateUserRole();
+
+    this.authService.isLoggedIn().subscribe(loggedIn => {
+      if (!loggedIn) {
+        this.userRole = null;
+      } else {
+        this.updateUserRole();
+      }
+    });
+  }
+
+  updateUserRole() {
     const token = localStorage.getItem('token');
     if (token) {
-      // Fetch current user details using the token (username)
-      // Assuming the token is the username for simplicity
-      this.userService.getUsers().subscribe(users => {
-        const user = users.find(u => u.username === token);
-        if (user) {
-          this.currentUser = user;
-        }
-      });
+      try {
+        const decoded: any = jwt_decode(token);
+        this.userRole = decoded.role;
+      } catch (error) {
+        console.error('Invalid token');
+      }
     }
+  }
+
+  hasRole(expectedRoles: string[]): boolean {
+    if (!this.userRole) return false;
+    return expectedRoles.includes(this.userRole);
   }
 
   logout() {
     this.authService.logout();
     this.router.navigate(['/']);
-  }
-
-  get isAdmin(): boolean {
-    return this.currentUser?.role === 'admin';
-  }
-
-  get isStaff(): boolean {
-    return this.currentUser?.role === 'staff';
-  }
-
-  get isStaffOrAdmin(): boolean {
-    return this.isStaff || this.isAdmin;
   }
 }

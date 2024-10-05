@@ -1,27 +1,17 @@
 /* category-list.component.css */
-.category-list-container {
-    padding: 20px;
-  }
-  
-  .table-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  .spacer {
-    flex: 1 1 auto;
-  }
-  
-  table {
-    width: 100%;
-  }
-  
-  .mat-form-field {
-    width: 100%;
-  }
-  
-  button mat-icon {
-    font-size: 18px;
-  }
+.category-table-container {
+  padding: 16px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+table {
+  width: 100%;
+  margin-top: 20px;
+}
+
+button {
+  margin-right: 8px;
+}

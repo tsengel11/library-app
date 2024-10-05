@@ -1,0 +1,24 @@
+<!-- category-form.component.html -->
+<div class="form-container">
+    <mat-card class="form-card">
+      <mat-card-title>{{ isEditMode ? 'Edit Category' : 'Add New Category' }}</mat-card-title>
+      <mat-card-content>
+        <form (ngSubmit)="submit()" #categoryForm="ngForm">
+  
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Category Name</mat-label>
+            <input matInput [(ngModel)]="category.name" name="name" required>
+          </mat-form-field>
+  
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Description</mat-label>
+            <textarea matInput [(ngModel)]="category.description" name="description"></textarea>
+          </mat-form-field>
+  
+          <button mat-raised-button color="primary" type="submit" [disabled]="!categoryForm.form.valid">
+            {{ isEditMode ? 'Update Category' : 'Add Category' }}
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>

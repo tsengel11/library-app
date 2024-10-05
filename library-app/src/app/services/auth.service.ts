@@ -1,26 +1,13 @@
-// src/app/services/auth.service.ts
+// auth.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
-
-export interface User {
-  id?: number;
-  username: string;
-  password?: string;
-  role: string;
-  first_name: string;
-  last_name: string;
-  address?: string;
-  phone_number?: string;
-  status: string;
-}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private authUrl = 'http://localhost:8000/token';
-  private registerUrl = 'http://localhost:8000/users/';
+  private authUrl = 'http://localhost:8000';
   private loggedIn = new BehaviorSubject<boolean>(this.hasToken());
 
   constructor(private http: HttpClient) { }
@@ -28,11 +15,11 @@ export class AuthService {
   login(username: string, password: string): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
     const body = `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
-    return this.http.post<any>(this.authUrl, body, { headers });
+    return this.http.post<any>(`${this.authUrl}/token`, body, { headers });
   }
 
-  registerUser(user: User): Observable<User> {
-    return this.http.post<User>(this.registerUrl, user);
+  registerUser(user: any): Observable<any> {
+    return this.http.post<any>(`${this.authUrl}/users/`, user);
   }
 
   logout() {

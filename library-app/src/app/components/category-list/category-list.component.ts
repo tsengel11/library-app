@@ -1,6 +1,6 @@
-// category-list.component.ts (Extended)
+// category-list.component.ts
 import { Component, OnInit } from '@angular/core';
-import { CategoryService, Category } from '../../services/category.service';
+import { BookService } from '../../services/book.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 
@@ -11,11 +11,11 @@ import { Router } from '@angular/router';
 })
 export class CategoryListComponent implements OnInit {
 
-  categories: Category[] = [];
+  categories: any[] = [];
   displayedColumns: string[] = ['name', 'description', 'actions'];
 
   constructor(
-    private categoryService: CategoryService,
+    private bookService: BookService,
     private snackBar: MatSnackBar,
     private router: Router
   ) { }
@@ -25,26 +25,17 @@ export class CategoryListComponent implements OnInit {
   }
 
   loadCategories() {
-    this.categoryService.getCategories().subscribe(
+    this.bookService.getCategories().subscribe(
       data => this.categories = data,
       err => this.snackBar.open('Failed to load categories', 'Close', { duration: 3000 })
     );
   }
 
   addCategory() {
-    this.router.navigate(['/categories/add']);
+    this.router.navigate(['/add-category']);
   }
 
-  deleteCategory(category: Category) {
-    if (confirm(`Are you sure you want to delete category "${category.name}"?`)) {
-      this.categoryService.deleteCategory(category.id!).subscribe(
-        res => {
-          this.snackBar.open('Category deleted successfully!', 'Close', { duration: 3000 });
-          this.loadCategories();
-        },
-        err => this.snackBar.open('Failed to delete category', 'Close', { duration: 3000 })
-      );
-    }
+  editCategory(category: any) {
+    this.router.navigate(['/edit-category', category.id]);
   }
-
 }
