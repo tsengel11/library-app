@@ -9,9 +9,9 @@ import { UserRegistrationComponent } from './components/user-registration/user-r
 import { CategoryListComponent } from './components/category-list/category-list.component';
 import { CategoryFormComponent } from './components/category-form/category-form.component';
 import { BorrowBookComponent } from './components/borrow-book/borrow-book.component';
-import { AuthGuard } from './auth.guard';
+import { AuthGuard } from './guards/auth.guard';
 
-const routes: Routes = [
+export const routes: Routes = [
   { path: '', component: LoginComponent },
   { path: 'register', component: UserRegistrationComponent },
   { path: 'books', component: BookListComponent, canActivate: [AuthGuard] },

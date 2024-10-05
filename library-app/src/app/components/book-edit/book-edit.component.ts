@@ -8,7 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-book-edit',
   templateUrl: './book-edit.component.html',
-  styleUrls: ['./book-edit.component.css']
+  styleUrls: ['./book-edit.component.scss']
 })
 export class BookEditComponent implements OnInit {
 

@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-borrow-list',
   templateUrl: './borrow-list.component.html',
-  styleUrls: ['./borrow-list.component.css']
+  styleUrls: ['./borrow-list.component.scss']
 })
 export class BorrowListComponent implements OnInit {
 

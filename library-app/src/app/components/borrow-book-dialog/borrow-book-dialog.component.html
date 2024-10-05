@@ -1,25 +1,36 @@
 <!-- borrow-book-dialog.component.html -->
 <h1 mat-dialog-title>Borrow Book</h1>
-<zxing-scanner
-  *ngIf="showScanner"
-  [device]="selectedDevice"
-  (camerasFound)="onCamerasFound($event)"
-  (scanSuccess)="onCodeResult($event)">
-</zxing-scanner>
+
 
 <button mat-button (click)="showScanner = !showScanner">
   {{ showScanner ? 'Hide Scanner' : 'Scan Barcode' }}
 </button>
 
-<div mat-dialog-content>
-  <mat-form-field appearance="fill" class="full-width">
-    <mat-label>Select User</mat-label>
-    <mat-select [(ngModel)]="selectedUserId" name="selectedUserId" required>
-      <mat-option *ngFor="let user of users" [value]="user.id">
-        {{ user.first_name }} {{ user.last_name }} ({{ user.username }})
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+<mat-form-field appearance="fill">
+  <mat-label>Select User</mat-label>
+  <mat-select [(value)]="selectedUserId">
+    <mat-option *ngFor="let user of users" [value]="user.id">
+      {{ user.firstName }} {{ user.lastName }} (ID: {{ user.id }})
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+  <!-- Barcode Scanner -->
+  <zxing-scanner
+    *ngIf="hasPermission"
+    [device]="selectedDevice"
+    (scanSuccess)="onCodeResult($event)"
+  ></zxing-scanner>
+
+  <div *ngIf="!hasPermission">
+    <p>Camera access is required to scan barcodes.</p>
+  </div>
+
+  <!-- Display Scanned Barcode -->
+  <div *ngIf="scannedBarcode">
+    <p>Scanned Barcode: {{ scannedBarcode }}</p>
+  </div>
+  <!-- Borrow Button -->
+  <button mat-raised-button color="primary" (click)="onBorrow()">Borrow Book</button>
 
   <mat-form-field appearance="fill" class="full-width">
     <mat-label>Book Barcode</mat-label>
@@ -35,7 +46,6 @@
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
-</div>
 
 <div mat-dialog-actions>
   <button mat-button (click)="onCancel()">Cancel</button>

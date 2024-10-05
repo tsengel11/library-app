@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-borrow-book',
   templateUrl: './borrow-book.component.html',
-  styleUrls: ['./borrow-book.component.css']
+  styleUrls: ['./borrow-book.component.scss']
 })
 export class BorrowBookComponent implements OnInit {
 

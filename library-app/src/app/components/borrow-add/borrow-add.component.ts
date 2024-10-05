@@ -2,14 +2,14 @@
 import { Component, OnInit } from '@angular/core';
 import { BorrowService, Borrow } from '../../services/borrow.service';
 import { BookService, Book } from '../../services/book.service';
-import { UserService, User } from '../../services/user.service';
+import { UserService, User } from '../../services/user.service'
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-borrow-add',
   templateUrl: './borrow-add.component.html',
-  styleUrls: ['./borrow-add.component.css']
+  styleUrls: ['./borrow-add.component.scss']
 })
 export class BorrowAddComponent implements OnInit {
 
@@ -60,7 +60,7 @@ export class BorrowAddComponent implements OnInit {
 
   scanBarcode() {
     const book = this.books.find(b => b.isbn === this.scannedBarcode);
-    if (book && book.available_quantity > 0) {
+    if (book && book.available_quantity !== undefined && book.available_quantity > 0) {
       this.borrow.book_id = book.id!;
       this.borrow.due_date = this.calculateDueDate();
       this.snackBar.open(`Book "${book.title}" selected`, 'Close', { duration: 3000 });
@@ -68,7 +68,6 @@ export class BorrowAddComponent implements OnInit {
       this.snackBar.open('Book not found or unavailable', 'Close', { duration: 3000 });
     }
   }
-
   calculateDueDate(): string {
     const today = new Date();
     const due = new Date(today);

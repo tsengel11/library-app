@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject, tap } from 'rxjs';
+import { jwtDecode } from "jwt-decode";
 
 export interface User {
   id?: number;
@@ -58,7 +59,17 @@ export class AuthService {
     return !!localStorage.getItem('token');
   }
 
-  getUserRole(): string {
-    return localStorage.getItem('role');
+  getUserRole(): string | null {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const decoded: any = jwtDecode(token);
+        return decoded.role || null;
+      } catch (error) {
+        console.error('Invalid token');
+        return null;
+      }
+    }
+    return null;
   }
 }

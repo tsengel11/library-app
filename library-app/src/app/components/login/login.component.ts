@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import jwt_decode from 'jwt-decode';
+import { jwtDecode } from "jwt-decode";
 
 @Component({
   selector: 'app-login',
@@ -30,7 +30,7 @@ export class LoginComponent {
         this.authService.setLoggedIn(true);
 
         // Decode token to get user role
-        const decoded: any = jwt_decode(res.access_token);
+        const decoded: any = jwtDecode(res.access_token);
         const userRole = decoded.role;
 
         // Navigate based on role
