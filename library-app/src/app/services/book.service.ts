@@ -1,4 +1,4 @@
-// book.service.ts
+// src/app/services/book.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -12,7 +12,7 @@ export interface Book {
   edition?: string;
   total_quantity: number;
   available_quantity?: number;
-  categories?: string[]; // Array of category names
+  categories: string[];
 }
 
 @Injectable({
@@ -20,6 +20,7 @@ export interface Book {
 })
 export class BookService {
   private booksUrl = 'http://localhost:8000/books/';
+  private categoriesUrl = 'http://localhost:8000/categories/';
 
   constructor(private http: HttpClient) { }
 
@@ -38,18 +39,11 @@ export class BookService {
     return this.http.post<Book>(this.booksUrl, book, { headers });
   }
 
-  updateBook(book: Book): Observable<Book> {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({ 
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    });
-    return this.http.put<Book>(`${this.booksUrl}${book.id}/`, book, { headers });
-  }
-
-  deleteBook(id: number): Observable<any> {
+  getCategories(): Observable<string[]> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
-    return this.http.delete(`${this.booksUrl}${id}/`, { headers });
+    return this.http.get<string[]>(this.categoriesUrl, { headers });
   }
+
+  // Implement other methods like updateBook, deleteBook as needed
 }

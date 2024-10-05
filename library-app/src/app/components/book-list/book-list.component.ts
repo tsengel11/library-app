@@ -1,8 +1,9 @@
-// book-list.component.ts
+// src/app/components/book-list/book-list.component.ts
 import { Component, OnInit } from '@angular/core';
 import { BookService, Book } from '../../services/book.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { BorrowBookDialogComponent } from '../borrow-book-dialog/borrow-book-dialog.component';
 
 @Component({
   selector: 'app-book-list',
@@ -12,12 +13,12 @@ import { Router } from '@angular/router';
 export class BookListComponent implements OnInit {
 
   books: Book[] = [];
-  displayedColumns: string[] = ['title', 'author', 'isbn', 'publisher', 'edition', 'total_quantity', 'available_quantity', 'actions'];
+  displayedColumns: string[] = ['title', 'author', 'isbn', 'publisher', 'edition', 'available_quantity', 'actions'];
 
   constructor(
     private bookService: BookService,
     private snackBar: MatSnackBar,
-    private router: Router
+    public dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -31,23 +32,19 @@ export class BookListComponent implements OnInit {
     );
   }
 
-  addBook() {
-    this.router.navigate(['/books/add']);
+  borrowBook(book: Book) {
+    const dialogRef = this.dialog.open(BorrowBookDialogComponent, {
+      width: '300px',
+      data: { bookId: book.id, bookTitle: book.title }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'success') {
+        this.snackBar.open(`Borrowed ${book.title}`, 'Close', { duration: 3000 });
+        this.loadBooks();
+      }
+    });
   }
 
-  editBook(book: Book) {
-    this.router.navigate([`/books/edit/${book.id}`]);
-  }
-
-  deleteBook(book: Book) {
-    if (confirm(`Are you sure you want to delete "${book.title}"?`)) {
-      this.bookService.deleteBook(book.id!).subscribe(
-        res => {
-          this.snackBar.open('Book deleted successfully!', 'Close', { duration: 3000 });
-          this.loadBooks();
-        },
-        err => this.snackBar.open('Failed to delete book', 'Close', { duration: 3000 })
-      );
-    }
-  }
+  // Implement other actions like returnBook, editBook, deleteBook as needed
 }
