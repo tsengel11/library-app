@@ -14,7 +14,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 // Routing Module
-import { AppRoutingModule } from './app-routing.module';
 
 // Root Component
 import { AppComponent } from './app.component';
@@ -42,7 +41,6 @@ import { BorrowBookDialogComponent } from './components/borrow-book-dialog/borro
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule, // Required for making HTTP requests
-    AppRoutingModule,
     MaterialModule, // Custom module where you import Angular Material components
   ],
   providers: [],
