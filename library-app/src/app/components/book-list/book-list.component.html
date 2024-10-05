@@ -9,8 +9,11 @@
 
 <div class="book-table-container">
   <button mat-raised-button color="accent" (click)="addBook()">Add New Book</button>
+<!-- book-list.component.html -->
+<button *ngIf="isStaff()" mat-raised-button color="primary" (click)="openBorrowDialog()">Borrow Book</button>
+  <mat-progress-spinner *ngIf="isLoading" mode="indeterminate"></mat-progress-spinner>
 
-  <table mat-table [dataSource]="books" class="mat-elevation-z8">
+  <table mat-table [dataSource]="books" class="mat-elevation-z8" *ngIf="!isLoading">
 
     <!-- Title Column -->
     <ng-container matColumnDef="title">

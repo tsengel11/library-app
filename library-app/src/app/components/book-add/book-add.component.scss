@@ -1,19 +1,15 @@
-/* book-add.component.css */
-.book-add-container {
-    display: flex;
-    justify-content: center;
-    padding: 20px;
-  }
-  
-  .book-add-card {
-    width: 600px;
-  }
-  
-  .full-width {
-    width: 100%;
-    margin-bottom: 15px;
-  }
-  
-  .spacer {
-    flex: 1 1 auto;
-  }
+/* src/app/components/add-book/add-book.component.css */
+.add-book-container {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.add-book-card {
+  width: 600px;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}

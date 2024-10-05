@@ -1,60 +1,57 @@
-// book-add.component.ts
+// src/app/components/add-book/add-book.component.ts
 import { Component, OnInit } from '@angular/core';
 import { BookService, Book } from '../../services/book.service';
-import { CategoryService, Category } from '../../services/category.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'app-book-add',
-  templateUrl: './book-add.component.html',
-  styleUrls: ['./book-add.component.css']
+  selector: 'app-add-book',
+  templateUrl: './add-book.component.html',
+  styleUrls: ['./add-book.component.css']
 })
-export class BookAddComponent implements OnInit {
+export class AddBookComponent implements OnInit {
 
-  book: Book = {
-    title: '',
-    author: '',
-    isbn: '',
-    publisher: '',
-    edition: '',
-    total_quantity: 1,
-    available_quantity: 1,
-    categories: []
-  };
-
-  categories: Category[] = [];
+  addBookForm: FormGroup;
+  categories: string[] = [];
   selectedCategories: string[] = [];
 
   constructor(
     private bookService: BookService,
-    private categoryService: CategoryService,
     private snackBar: MatSnackBar,
-    private router: Router
-  ) { }
-
-  ngOnInit(): void {
-    this.loadCategories();
+    private fb: FormBuilder
+  ) { 
+    this.addBookForm = this.fb.group({
+      title: ['', Validators.required],
+      author: ['', Validators.required],
+      isbn: ['', Validators.required],
+      publisher: [''],
+      edition: [''],
+      total_quantity: [1, [Validators.required, Validators.min(1)]],
+      categories: [[], Validators.required]
+    });
   }
 
-  loadCategories() {
-    this.categoryService.getCategories().subscribe(
+  ngOnInit() {
+    this.bookService.getCategories().subscribe(
       data => this.categories = data,
       err => this.snackBar.open('Failed to load categories', 'Close', { duration: 3000 })
     );
   }
 
   addBook() {
-    this.book.categories = this.selectedCategories;
-    this.bookService.addBook(this.book).subscribe(
-      res => {
-        this.snackBar.open('Book added successfully!', 'Close', { duration: 3000 });
-        this.router.navigate(['/books']);
-      },
-      err => {
-        this.snackBar.open('Failed to add book', 'Close', { duration: 3000 });
-      }
-    );
+    if (this.addBookForm.valid) {
+      const newBook: Book = {
+        ...this.addBookForm.value
+      };
+      this.bookService.addBook(newBook).subscribe(
+        res => {
+          this.snackBar.open('Book added successfully!', 'Close', { duration: 3000 });
+          this.addBookForm.reset({ total_quantity: 1, role: 'user', status: 'active' });
+        },
+        err => {
+          this.snackBar.open('Failed to add book.', 'Close', { duration: 3000 });
+        }
+      );
+    }
   }
-
 }

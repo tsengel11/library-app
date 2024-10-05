@@ -10,6 +10,8 @@ import { CategoryListComponent } from './components/category-list/category-list.
 import { CategoryFormComponent } from './components/category-form/category-form.component';
 import { BorrowBookComponent } from './components/borrow-book/borrow-book.component';
 import { AuthGuard } from './guards/auth.guard';
+import { StaffGuard } from './guards/staff.guard';
+import { BorrowBookDialogComponent } from './components/borrow-book-dialog/borrow-book-dialog.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -56,6 +58,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: { expectedRoles: ['staff'] }
   },
+  { path: 'borrow', component: BorrowBookDialogComponent, canActivate: [StaffGuard] },
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
