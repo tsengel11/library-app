@@ -1,0 +1,19 @@
+/* category-add.component.css */
+.category-add-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+  }
+  
+  .category-add-card {
+    width: 500px;
+  }
+  
+  .full-width {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  
+  .spacer {
+    flex: 1 1 auto;
+  }

@@ -1,0 +1,64 @@
+<!-- user-registration.component.html -->
+<div class="registration-container">
+    <mat-card class="registration-card">
+      <mat-card-title>User Registration</mat-card-title>
+      <mat-card-content>
+        <form (ngSubmit)="register()" #registrationForm="ngForm">
+  
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Username</mat-label>
+            <input matInput [(ngModel)]="user.username" name="username" required>
+          </mat-form-field>
+  
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Password</mat-label>
+            <input matInput type="password" [(ngModel)]="user.password" name="password" required>
+          </mat-form-field>
+  
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>First Name</mat-label>
+            <input matInput [(ngModel)]="user.first_name" name="first_name" required>
+          </mat-form-field>
+  
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Last Name</mat-label>
+            <input matInput [(ngModel)]="user.last_name" name="last_name" required>
+          </mat-form-field>
+  
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Address</mat-label>
+            <input matInput [(ngModel)]="user.address" name="address">
+          </mat-form-field>
+  
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Phone Number</mat-label>
+            <input matInput [(ngModel)]="user.phone_number" name="phone_number">
+          </mat-form-field>
+  
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Status</mat-label>
+            <mat-select [(ngModel)]="user.status" name="status" required>
+              <mat-option value="active">Active</mat-option>
+              <mat-option value="deactive">Deactive</mat-option>
+            </mat-select>
+          </mat-form-field>
+  
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Role</mat-label>
+            <mat-select [(ngModel)]="user.role" name="role" required>
+              <mat-option value="user">User</mat-option>
+              <mat-option value="staff">Staff</mat-option>
+              <mat-option value="admin">Admin</mat-option>
+            </mat-select>
+          </mat-form-field>
+  
+          <button mat-raised-button color="primary" type="submit" [disabled]="!registrationForm.form.valid">
+            Register
+          </button>
+        </form>
+      </mat-card-content>
+      <mat-card-footer *ngIf="errorMessage">
+        <mat-error>{{ errorMessage }}</mat-error>
+      </mat-card-footer>
+    </mat-card>
+  </div>
