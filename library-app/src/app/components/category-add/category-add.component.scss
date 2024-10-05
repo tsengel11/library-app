@@ -1,12 +1,11 @@
-/* user-registration.component.css */
-.registration-container {
+/* category-add.component.css */
+.category-add-container {
     display: flex;
     justify-content: center;
-    align-items: center;
     padding: 20px;
   }
   
-  .registration-card {
+  .category-add-card {
     width: 500px;
   }
   
@@ -15,6 +14,6 @@
     margin-bottom: 15px;
   }
   
-  button {
-    width: 100%;
+  .spacer {
+    flex: 1 1 auto;
   }

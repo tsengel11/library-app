@@ -1,0 +1,69 @@
+<!-- borrow-list.component.html -->
+<mat-toolbar color="primary">
+    <span>Borrow Records</span>
+    <span class="spacer"></span>
+    <button mat-icon-button (click)="logout()">
+      <mat-icon>exit_to_app</mat-icon>
+    </button>
+  </mat-toolbar>
+  
+  <div class="borrow-list-container">
+    <div class="table-header">
+      <h2>Borrow Records</h2>
+      <button mat-raised-button color="primary" (click)="addBorrow()">Borrow Book</button>
+    </div>
+    
+    <table mat-table [dataSource]="borrows" class="mat-elevation-z8">
+  
+      <!-- User ID Column -->
+      <ng-container matColumnDef="user_id">
+        <th mat-header-cell *matHeaderCellDef>User ID</th>
+        <td mat-cell *matCellDef="let borrow">{{ borrow.user_id }}</td>
+      </ng-container>
+  
+      <!-- Book ID Column -->
+      <ng-container matColumnDef="book_id">
+        <th mat-header-cell *matHeaderCellDef>Book ID</th>
+        <td mat-cell *matCellDef="let borrow">{{ borrow.book_id }}</td>
+      </ng-container>
+  
+      <!-- Reserve Date Column -->
+      <ng-container matColumnDef="reserve_date">
+        <th mat-header-cell *matHeaderCellDef>Reserve Date</th>
+        <td mat-cell *matCellDef="let borrow">{{ borrow.reserve_date | date }}</td>
+      </ng-container>
+  
+      <!-- Due Date Column -->
+      <ng-container matColumnDef="due_date">
+        <th mat-header-cell *matHeaderCellDef>Due Date</th>
+        <td mat-cell *matCellDef="let borrow">{{ borrow.due_date | date }}</td>
+      </ng-container>
+  
+      <!-- Return Date Column -->
+      <ng-container matColumnDef="return_date">
+        <th mat-header-cell *matHeaderCellDef>Return Date</th>
+        <td mat-cell *matCellDef="let borrow">{{ borrow.return_date | date }}</td>
+      </ng-container>
+  
+      <!-- Is Returned Column -->
+      <ng-container matColumnDef="is_returned">
+        <th mat-header-cell *matHeaderCellDef>Returned</th>
+        <td mat-cell *matCellDef="let borrow">{{ borrow.is_returned ? 'Yes' : 'No' }}</td>
+      </ng-container>
+  
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let borrow">
+          <button mat-button color="accent" (click)="returnBook(borrow)" [disabled]="borrow.is_returned">
+            <mat-icon>assignment_return</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+  
+      <!-- Header and Row Declarations -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  
+    </table>
+  </div>
