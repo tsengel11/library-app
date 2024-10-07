@@ -1,51 +1,58 @@
-// app.component.ts (Updated)
-import { Component, OnInit } from '@angular/core';
+// src/app/app.component.ts
+
+import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router'; // Import RouterModule without forRoot
+import { CommonModule } from '@angular/common';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from './services/auth.service';
-import {jwtDecode} from 'jwt-decode';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  template: `
+    <mat-toolbar color="primary">
+      <span>Library Management</span>
+      <span class="spacer"></span>
+      <button mat-button routerLink="/users">Users</button>
+      <button mat-button routerLink="/books">Books</button>
+      <button mat-button routerLink="/borrows">Borrows</button>
+      <button mat-button routerLink="/categories">Categories</button>
+      <button mat-button (click)="logout()">Logout</button>
+    </mat-toolbar>
+    <router-outlet></router-outlet>
+  `,
+  styles: [
+    `
+      .spacer {
+        flex: 1 1 auto;
+      }
+      mat-toolbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 2;
+      }
+      router-outlet {
+        margin-top: 64px; /* Height of the toolbar */
+        display: block;
+      }
+    `,
+  ],
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule, // Import RouterModule without forRoot
+    MatToolbarModule,
+    MatButtonModule,
+  ],
 })
-export class AppComponent implements OnInit {
-  title = 'library-app';
-  userRole: string | null = null;
-
-  constructor(private authService: AuthService, private router: Router) { }
-
-  ngOnInit(): void {
-    this.updateUserRole();
-
-    this.authService.isLoggedIn().subscribe(loggedIn => {
-      if (!loggedIn) {
-        this.userRole = null;
-      } else {
-        this.updateUserRole();
-      }
-    });
-  }
-
-  updateUserRole() {
-    const token = localStorage.getItem('token');
-    if (token) {
-      try {
-        const decoded: any = jwtDecode(token);
-        this.userRole = decoded.role;
-      } catch (error) {
-        console.error('Invalid token');
-      }
-    }
-  }
-
-  hasRole(expectedRoles: string[]): boolean {
-    if (!this.userRole) return false;
-    return expectedRoles.includes(this.userRole);
-  }
+export class AppComponent {
+  constructor(private auth: AuthService, private router: Router) {}
 
   logout() {
-    this.authService.logout();
-    this.router.navigate(['/']);
+    this.auth.logout();
+    this.router.navigate(['/login']);
   }
 }

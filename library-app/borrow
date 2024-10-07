@@ -1,0 +1,197 @@
+ng generate component borrows/borrow-list --standalone --import=CommonModule,MatTableModule,MatPaginatorModule,MatSortModule, MatButtonModule
+ng generate component borrows/borrow-create --standalone --import=CommonModule,ReactiveFormsModule,MatFormFieldModule,MatInputModule,MatButtonModule, MatSelectModule, MatDatepickerModule, MatNativeDateModule
+
+
+// src/app/borrows/borrow-list/borrow-list.component.ts
+
+import { Component, OnInit } from '@angular/core';
+import { BorrowService, Borrow } from '../../services/library-api';
+import { MatTableDataSource } from '@angular/material/table';
+
+@Component({
+  selector: 'app-borrow-list',
+  templateUrl: './borrow-list.component.html',
+  styleUrls: ['./borrow-list.component.scss'],
+  standalone: true,
+})
+export class BorrowListComponent implements OnInit {
+  displayedColumns: string[] = ['id', 'user', 'book', 'reserveDate', 'dueDate', 'returnDate', 'isReturned', 'actions'];
+  dataSource = new MatTableDataSource<Borrow>();
+
+  constructor(private borrowService: BorrowService) {}
+
+  ngOnInit() {
+    this.borrowService.readBorrows().subscribe({
+      next: (borrows) => this.dataSource.data = borrows,
+      error: (err) => console.error(err),
+    });
+  }
+
+  returnBook(borrowId: number) {
+    this.borrowService.returnBook(borrowId).subscribe({
+      next: (updatedBorrow) => {
+        // Update the borrow in the dataSource
+        const index = this.dataSource.data.findIndex(b => b.id === borrowId);
+        if (index !== -1) {
+          this.dataSource.data[index] = updatedBorrow;
+          this.dataSource._updateChangeSubscription(); // Refresh the table
+        }
+      },
+      error: (err) => console.error(err),
+    });
+  }
+}
+
+
+// src/app/borrows/borrow-create/borrow-create.component.ts
+
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { BorrowService, BorrowCreate, User, Book } from '../../services/library-api';
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+
+@Component({
+  selector: 'app-borrow-create',
+  templateUrl: './borrow-create.component.html',
+  styleUrls: ['./borrow-create.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+  ],
+})
+export class BorrowCreateComponent implements OnInit {
+  users: User[] = [];
+  books: Book[] = [];
+
+  borrowForm = this.fb.group({
+    user_id: ['', Validators.required],
+    book_id: ['', Validators.required],
+    reserve_date: [new Date()],
+    due_date: [null],
+    return_date: [null],
+    is_returned: [false],
+  });
+
+  constructor(
+    private fb: FormBuilder,
+    private borrowService: BorrowService,
+    private router: Router
+  ) {}
+
+  ngOnInit() {
+    // Fetch users and books for selection
+    this.borrowService.readUsers().subscribe({
+      next: (users) => this.users = users,
+      error: (err) => console.error(err),
+    });
+
+    this.borrowService.readBooks().subscribe({
+      next: (books) => this.books = books,
+      error: (err) => console.error(err),
+    });
+  }
+
+  onSubmit() {
+    if (this.borrowForm.valid) {
+      const borrow: BorrowCreate = this.borrowForm.value;
+      this.borrowService.borrowBook(borrow).subscribe({
+        next: () => this.router.navigate(['/borrows']),
+        error: (err) => console.error(err),
+      });
+    }
+  }
+}
+
+
+ng generate component categories/category-list --standalone --import=CommonModule,MatTableModule,MatPaginatorModule,MatSortModule
+ng generate component categories/category-create --standalone --import=CommonModule,ReactiveFormsModule,MatFormFieldModule,MatInputModule,MatButtonModule
+
+
+// src/app/categories/category-list/category-list.component.ts
+
+import { Component, OnInit } from '@angular/core';
+import { CategoryService, Category } from '../../services/library-api';
+import { MatTableDataSource } from '@angular/material/table';
+
+@Component({
+  selector: 'app-category-list',
+  templateUrl: './category-list.component.html',
+  styleUrls: ['./category-list.component.scss'],
+  standalone: true,
+})
+export class CategoryListComponent implements OnInit {
+  displayedColumns: string[] = ['id', 'name', 'actions'];
+  dataSource = new MatTableDataSource<Category>();
+
+  constructor(private categoryService: CategoryService) {}
+
+  ngOnInit() {
+    this.categoryService.readCategories().subscribe({
+      next: (categories) => this.dataSource.data = categories,
+      error: (err) => console.error(err),
+    });
+  }
+
+  // Additional methods for edit, delete can be added here
+}
+
+
+// src/app/categories/category-create/category-create.component.ts
+
+import { Component } from '@angular/core';
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { CategoryService, CategoryCreate } from '../../services/library-api';
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+
+@Component({
+  selector: 'app-category-create',
+  templateUrl: './category-create.component.html',
+  styleUrls: ['./category-create.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+  ],
+})
+export class CategoryCreateComponent {
+  categoryForm = this.fb.group({
+    name: ['', Validators.required],
+  });
+
+  constructor(
+    private fb: FormBuilder,
+    private categoryService: CategoryService,
+    private router: Router
+  ) {}
+
+  onSubmit() {
+    if (this.categoryForm.valid) {
+      const category: CategoryCreate = this.categoryForm.value;
+      this.categoryService.createCategory(category).subscribe({
+        next: () => this.router.navigate(['/categories']),
+        error: (err) => console.error(err),
+      });
+    }
+  }
+}

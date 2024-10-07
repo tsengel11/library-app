@@ -1,0 +1,41 @@
+/* src/app/app.component.scss */
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f4f7;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+  .login-card {
+    padding: 10px;
+  }
+}

@@ -1,0 +1,73 @@
+<!-- src/app/components/login/login.component.html -->
+
+<div class="login-container">
+  <nb-card class="login-card">
+    <nb-card-header>
+      Login
+    </nb-card-header>
+    <nb-card-body>
+      <form [formGroup]="loginForm" (ngSubmit)="login()">
+        <!-- Username Field -->
+        <nb-form-field appearance="outline" class="full-width">
+          <nb-icon nbPrefix icon="person-outline"></nb-icon>
+          <input
+            nbInput
+            placeholder="Username"
+            type="text"
+            formControlName="username"
+            required
+            autocomplete="username"
+          />
+
+        </nb-form-field>
+        <nb-alert
+          *ngIf="loginForm.get('username')?.hasError('required') && loginForm.get('username')?.touched"
+          status="danger"
+          size="small"
+        >
+          Username is required
+        </nb-alert>
+
+        <!-- Password Field -->
+        <nb-form-field appearance="outline" class="full-width">
+          <nb-icon nbPrefix icon="lock-outline"></nb-icon>
+          <input
+            nbInput
+            placeholder="Password"
+            type="password"
+            formControlName="password"
+            required
+            autocomplete="current-password"
+          />
+
+        </nb-form-field>
+        <nb-alert
+          *ngIf="loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched"
+          status="danger"
+          size="small"
+        >
+          Password is required
+        </nb-alert>
+        <nb-alert
+          *ngIf="loginForm.get('password')?.hasError('minlength') && loginForm.get('password')?.touched"
+          status="danger"
+          size="small"
+        >
+          Password must be at least 6 characters long
+        </nb-alert>
+
+        <!-- Submit Button -->
+        <div class="button-container">
+          <button
+            nbButton
+            status="primary"
+            type="submit"
+            [disabled]="loginForm.invalid"
+          >
+            Login
+          </button>
+        </div>
+      </form>
+    </nb-card-body>
+  </nb-card>
+</div>

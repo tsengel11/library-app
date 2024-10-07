@@ -1,0 +1,20 @@
+<!-- src/app/app.component.html -->
+
+<nb-layout>
+  <!-- Header -->
+
+  
+
+  <!-- Sidebar -->
+  <nb-sidebar
+    #sidebar
+    responsive
+  >
+<nb-menu [items]="menuItems"></nb-menu>
+</nb-sidebar>
+
+  <!-- Main Content -->
+  <nb-layout-column>
+    <router-outlet></router-outlet>
+  </nb-layout-column>
+</nb-layout>

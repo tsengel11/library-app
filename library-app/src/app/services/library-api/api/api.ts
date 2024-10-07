@@ -1,0 +1,13 @@
+export * from './auth.service';
+import { AuthService } from './auth.service';
+export * from './books.service';
+import { BooksService } from './books.service';
+export * from './borrows.service';
+import { BorrowsService } from './borrows.service';
+export * from './categories.service';
+import { CategoriesService } from './categories.service';
+export * from './default.service';
+import { DefaultService } from './default.service';
+export * from './users.service';
+import { UsersService } from './users.service';
+export const APIS = [AuthService, BooksService, BorrowsService, CategoriesService, DefaultService, UsersService];
